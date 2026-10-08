@@ -1,0 +1,137 @@
+[
+  {
+    "id": "alert_001",
+    "alert_text": "Process: powershell.exe -enc JABzAD0ATgBlAHcA... Parent: WINWORD.EXE User: jdoe Host: WS-014",
+    "expected": {
+      "classification": "MALICIOUS",
+      "severity": "HIGH",
+      "technique": "T1059.001"
+    }
+  },
+  {
+    "id": "alert_002",
+    "alert_text": "Event: User jdoe successfully logged in. Source: 192.168.1.100. Time: 09:15 AM",
+    "expected": {
+      "classification": "BENIGN",
+      "severity": "LOW",
+      "technique": "NONE"
+    }
+  },
+  {
+    "id": "alert_003",
+    "alert_text": "Process: lsass.exe attempted to access registry hive HKLM\\SAM. Process Parent: svchost.exe",
+    "expected": {
+      "classification": "MALICIOUS",
+      "severity": "CRITICAL",
+      "technique": "T1003.001"
+    }
+  },
+  {
+    "id": "alert_004",
+    "alert_text": "Service: Windows Update installed successfully. Status: Running. Auto-start: Enabled",
+    "expected": {
+      "classification": "BENIGN",
+      "severity": "LOW",
+      "technique": "NONE"
+    }
+  },
+  {
+    "id": "alert_005",
+    "alert_text": "Process: cmd.exe spawned from Excel (EXCEL.EXE). Command: whoami. User: jdoe. Host: WS-005",
+    "expected": {
+      "classification": "SUSPICIOUS",
+      "severity": "HIGH",
+      "technique": "T1057"
+    }
+  },
+  {
+    "id": "alert_006",
+    "alert_text": "Failed login attempts: 47 failed login attempts for user admin in 5 minutes from source IP 203.0.113.45",
+    "expected": {
+      "classification": "SUSPICIOUS",
+      "severity": "HIGH",
+      "technique": "T1110"
+    }
+  },
+  {
+    "id": "alert_007",
+    "alert_text": "Scheduled task created: Name='Update Manager' Run as user: SYSTEM Trigger: At startup Command: C:\\Users\\Public\\update.exe",
+    "expected": {
+      "classification": "MALICIOUS",
+      "severity": "HIGH",
+      "technique": "T1053.005"
+    }
+  },
+  {
+    "id": "alert_008",
+    "alert_text": "File downloaded: document.pdf from trusted.example.com via browser. File hash: A1B2C3D4... Verdict: Clean",
+    "expected": {
+      "classification": "BENIGN",
+      "severity": "LOW",
+      "technique": "NONE"
+    }
+  },
+  {
+    "id": "alert_009",
+    "alert_text": "Process: notepad.exe executed. Parent: explorer.exe User: jdoe. Command: open readme.txt. No suspicious flags.",
+    "expected": {
+      "classification": "BENIGN",
+      "severity": "LOW",
+      "technique": "NONE"
+    }
+  },
+  {
+    "id": "alert_010",
+    "alert_text": "Registry modification: HKLM\\Software\\Microsoft\\Windows\\Run Key added: C:\\Windows\\System32\\malware.exe",
+    "expected": {
+      "classification": "MALICIOUS",
+      "severity": "CRITICAL",
+      "technique": "T1547.001"
+    }
+  },
+  {
+    "id": "alert_011",
+    "alert_text": "Network connection: Process rundll32.exe connected to 198.51.100.50:443. No established certificate. Connection type: HTTPS",
+    "expected": {
+      "classification": "MALICIOUS",
+      "severity": "HIGH",
+      "technique": "T1071"
+    }
+  },
+  {
+    "id": "alert_012",
+    "alert_text": "Scheduled task deleted: Name='McAfee Update' deleted by user admin. Status: Normal maintenance",
+    "expected": {
+      "classification": "SUSPICIOUS",
+      "severity": "MEDIUM",
+      "technique": "T1562.001"
+    }
+  },
+  {
+    "id": "alert_013",
+    "alert_text": "Process: chrome.exe attempted to access file C:\\Windows\\System32\\lsass.exe. Parent: svchost.exe. Access type: Read",
+    "expected": {
+      "classification": "MALICIOUS",
+      "severity": "CRITICAL",
+      "technique": "T1003.001"
+    }
+  },
+  {
+    "id": "alert_014",
+    "alert_text": "User account created: NewAdmin added to Administrators group by user admin. Time: 23:47 PM. Date: 2026-10-08",
+    "expected": {
+      "classification": "SUSPICIOUS",
+      "severity": "HIGH",
+      "technique": "T1136.001"
+    }
+  },
+  {
+    "id": "alert_015",
+    "alert_text": "File C:\\Program Files\\7-Zip\\7z.exe executed. User: jdoe. Command: extract archive.zip. Purpose: Extract legitimate project files.",
+    "expected": {
+      "classification": "BENIGN",
+      "severity": "LOW",
+      "technique": "NONE"
+    }
+  }
+]
