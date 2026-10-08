@@ -40,12 +40,6 @@ AI alone is unreliable. Rules alone are rigid. Hybrid respects security while le
 - Defense evasion detection incomplete
 - No real SIEM integration
 
-## Next Steps
-- Expand to 50+ realistic alerts
-- Add Wazuh integration
-- Improve rule coverage for process discovery, lateral movement
-- Implement prompt injection filtering
-- Deploy as REST API
 
 ## Files
 - `main.py` — Rules engine + Qwen agent
