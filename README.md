@@ -47,3 +47,5 @@ AI alone is unreliable. Rules alone are rigid. Hybrid respects security while le
 - `adversarial_test.py` — Prompt injection tests
 - `evaluation_results_fixed.json` — Main evaluation metrics
 - `adversarial_results.json` — Security testing results
+
+- **Conclusion:** The system achieved 73% joint accuracy (11/15 alerts had all three outputs correct). Qwen3 with rule context matched the rules engine on joint accuracy, while the rules engine performed better on classification and technique identification in this evaluation.
