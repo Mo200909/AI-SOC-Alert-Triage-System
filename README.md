@@ -36,7 +36,7 @@ AI alone is unreliable. Rules alone are rigid. Hybrid respects security while le
 
 ## Limitations
 - Only 15 synthetic alerts (not production dataset)
-- Technique identification still weak (2/15 mismatches)
+- Technique identification still weak (3/15 mismatches)
 - Defense evasion detection incomplete
 - No real SIEM integration
 
