@@ -2,6 +2,8 @@
 
 A local hybrid security alert triage prototype combining deterministic Python rules with a local Qwen3 8B language model. The system classifies synthetic security alerts, assigns severity levels, maps findings to MITRE ATT&CK techniques, and evaluates resistance to adversarial prompt injection.
 
+In the current evaluation, the model's output matched the rules-only output on all 15 alerts, so no gain from the language model was measured.
+
 ## Features
 
 - **Deterministic rule engine:** Uses 17 regular-expression rules to identify suspicious or potentially malicious activity.
@@ -34,23 +36,33 @@ The model receives the rules engine's output as context. This is a comparison be
 
 ## Evaluation Results
 
-The current 15-alert evaluation reported the following Qwen3 results:
+The current 15-alert evaluation (`evaluation_results_fixed.json`) reported the following results:
 
-| Metric | Correct | Accuracy |
-|---|---:|---:|
-| Classification | 13/15 | 86% |
-| Severity | 12/15 | 80% |
-| MITRE ATT&CK technique | 12/15 | 80% |
-| All three fields correct | 11/15 | 73% |
+| Metric | Rules only | Qwen3 8B (with rule context) |
+|---|---|---|
+| Classification | 14/15 (93%) | 14/15 (93%) |
+| Severity | 12/15 (80%) | 12/15 (80%) |
+| MITRE ATT&CK technique | 14/15 (93%) | 14/15 (93%) |
+| All three fields correct | 12/15 (80%) | 12/15 (80%) |
 
-These results are from a small synthetic test set and should not be interpreted as production detection performance.
+Qwen3 output was identical to the rules-only output on all 15 alerts. These results show no measured improvement from the model, and they come from a small synthetic test set. They should not be interpreted as production detection performance.
 
-### Adversarial Testing
+### Misses
 
-Five prompt-injection test cases were evaluated.
+| Alert | Expected | Result | Issue |
+|---|---|---|---|
+| alert_005 | SUSPICIOUS / HIGH / T1057 | SUSPICIOUS / MEDIUM / T1057 | Severity one level low |
+| alert_010 | MALICIOUS / CRITICAL / T1547.001 | MALICIOUS / HIGH / T1547.001 | Severity one level low |
+| alert_012 | SUSPICIOUS / MEDIUM / T1562.001 | BENIGN / LOW / NONE | Missed detection (McAfee scheduled-task deletion), rated at 0.9 confidence |
+
+Model confidence values ranged from 0.7 to 0.95 across the 15 alerts. The incorrect alert_012 result was reported at 0.9 confidence, so confidence did not flag it as uncertain.
+
+## Adversarial Testing
+
+Five prompt-injection test cases were evaluated (`adversarial_results.json`).
 
 | Test outcome | Count |
-|---|---:|
+|---|---|
 | Defended | 3/5 |
 | Vulnerable | 2/5 |
 | Defense rate | 60% |
@@ -60,9 +72,11 @@ Observed weaknesses included reasoning poisoning and encoding evasion. These tes
 ## Known Limitations
 
 - Evaluation uses only 15 synthetic alerts.
-- The model receives rule-engine findings as context; a separate pure-AI baseline has not been established.
-- The McAfee scheduled-task deletion alert is a known detection gap in the original rule set.
-- Technique and severity assignments are not consistently correct.
+- The model receives rule-engine findings as context, and its output matched the rules-only output on every alert, so no benefit from the model was measured.
+- A separate pure-AI baseline has not been established.
+- The McAfee scheduled-task deletion alert (alert_012) is a known detection gap in the original rule set, and the model did not correct it.
+- Severity was one level low on two alerts (alert_005, alert_010).
+- Model confidence did not reliably indicate errors (the alert_012 miss was reported at 0.9).
 - Prompt-injection defenses are incomplete.
 - The system has not been integrated with a live SIEM or validated against real production telemetry.
 - Regular-expression rules can miss variations in alert wording and may produce false positives.
