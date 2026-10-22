@@ -83,9 +83,8 @@ Observed weaknesses included reasoning poisoning and encoding evasion. These tes
 
 ## Project Files
 
-- `main.py` — Rule engine, local model integration, and evaluation loop.
+- `main.py` — Rule engine, local model integration, evaluation loop, and Adversarial prompt-injection tests.
 - `alerts.json` — Synthetic alerts and expected classifications.
-- `main.py` — Adversarial prompt-injection tests.
 - `evaluation_results_fixed.json` — Per-alert rule and model evaluation results.
 - `adversarial_results.json` — Adversarial test results.
 
