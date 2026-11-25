@@ -30,13 +30,13 @@ In the current evaluation, the model's output matched the rules-only output on a
 3. The alert and rule findings are provided to Qwen3 as context.
 4. Qwen3 produces a structured triage result.
 5. The program compares both the rule output and model output against the expected labels.
-6. Evaluation results are written to `evaluation_results_fixed.json`.
+6. Evaluation results are written to `evaluation_results.json`.
 
 The model receives the rules engine's output as context. This is a comparison between deterministic rules and AI-assisted triage with rule context, not a comparison against a separately tested pure-AI baseline.
 
 ## Evaluation Results
 
-The current 15-alert evaluation (`evaluation_results_fixed.json`) reported the following results:
+The current 15-alert evaluation (`evaluation_results.json`) reported the following results:
 
 | Metric | Rules only | Qwen3 8B (with rule context) |
 |---|---|---|
@@ -53,9 +53,13 @@ Qwen3 output was identical to the rules-only output on all 15 alerts. These resu
 |---|---|---|---|
 | alert_005 | SUSPICIOUS / HIGH / T1057 | SUSPICIOUS / MEDIUM / T1057 | Severity one level low |
 | alert_010 | MALICIOUS / CRITICAL / T1547.001 | MALICIOUS / HIGH / T1547.001 | Severity one level low |
-| alert_012 | SUSPICIOUS / MEDIUM / T1562.001 | BENIGN / LOW / NONE | Missed detection (McAfee scheduled-task deletion), rated at 0.9 confidence |
+| alert_012 | SUSPICIOUS / MEDIUM / T1562.001 | BENIGN / LOW / NONE | Missed detection (McAfee scheduled-task deletion), rated at 0.95 confidence |
 
-Model confidence values ranged from 0.7 to 0.95 across the 15 alerts. The incorrect alert_012 result was reported at 0.9 confidence, so confidence did not flag it as uncertain.
+### Reproducibility Check (Nov 25, 2026)
+
+The full evaluation was re-run. Accuracy metrics were unchanged (14/15, 12/15, 14/15, 12/15), and Qwen3 8B still matched the rules engine on every field.
+
+Confidence was not stable between runs. In the earlier run, confidence ranged from 0.7 to 0.95. In the latest run, it was 0.95 on all 15 alerts, including all 3 errors. The model's confidence score is not calibrated and should not be used to prioritize alerts.
 
 ## Adversarial Testing
 
@@ -76,16 +80,16 @@ Observed weaknesses included reasoning poisoning and encoding evasion. These tes
 - A separate pure-AI baseline has not been established.
 - The McAfee scheduled-task deletion alert (alert_012) is a known detection gap in the original rule set, and the model did not correct it.
 - Severity was one level low on two alerts (alert_005, alert_010).
-- Model confidence did not reliably indicate errors (the alert_012 miss was reported at 0.9).
+- Model confidence is not calibrated: the latest run reported 0.95 on all 15 alerts, including all 3 errors, and scores changed between runs.
 - Prompt-injection defenses are incomplete.
 - The system has not been integrated with a live SIEM or validated against real production telemetry.
 - Regular-expression rules can miss variations in alert wording and may produce false positives.
 
 ## Project Files
 
-- `main.py` — Rule engine, local model integration, evaluation loop, and Adversarial prompt-injection tests.
+- `main.py` — Rule engine, local model integration, evaluation loop, and adversarial prompt-injection tests.
 - `alerts.json` — Synthetic alerts and expected classifications.
-- `evaluation_results_fixed.json` — Per-alert rule and model evaluation results.
+- `evaluation_results.json` — Per-alert rule and model evaluation results.
 - `adversarial_results.json` — Adversarial test results.
 
 ## Setup
@@ -98,23 +102,23 @@ Observed weaknesses included reasoning poisoning and encoding evasion. These tes
 
 Download the model:
 
-```bash
+```
 ollama pull qwen3:8b
 ```
 
 Install the Python dependency:
 
-```bash
+```
 pip install pydantic-ai
 ```
 
 Run the evaluation from the project directory:
 
-```bash
+```
 python main.py
 ```
 
-The script reads alerts.json, evaluates the alerts, prints accuracy metrics, and writes evaluation_results_fixed.json and adversarial_results.json.
+The script reads `alerts.json`, evaluates the alerts, prints accuracy metrics, and writes `evaluation_results.json` and `adversarial_results.json`.
 
 ## Project Goal
 
